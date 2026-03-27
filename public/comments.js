@@ -52,8 +52,6 @@ $addBtn.addEventListener('click', () => {
   commentMode = !commentMode;
   document.body.classList.toggle('comment-mode', commentMode);
   $addBtn.classList.toggle('active', commentMode);
-  if (!commentMode) return;
-  if (!ensureName()) { commentMode = false; document.body.classList.remove('comment-mode'); $addBtn.classList.remove('active'); }
 });
 
 // Click to place comment in comment mode
@@ -91,6 +89,7 @@ function openNewThread(sel) {
   div.style.top = (sel.y + 16) + 'px';
   div.innerHTML = `
     <div class="c-reply-input" style="border:none;">
+      <input id="cNewName" placeholder="Your name..." value="${esc(getAuthor())}" style="width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:6px;margin-bottom:6px;font-size:13px;">
       <textarea id="cNewTA" placeholder="Leave a comment..." rows="2"></textarea>
       <button id="cNewSubmit">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M10 4l4 4-4 4"/></svg>
@@ -105,10 +104,12 @@ function openNewThread(sel) {
   const submit = async () => {
     const body = ta.value.trim();
     if (!body) return;
+    const nameVal = document.getElementById('cNewName').value.trim() || 'Anonymous';
+    localStorage.setItem('c-name', nameVal);
     await fetch(API, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ slide_id: sel.slideId, selected_text: sel.text || '', pin_x: sel.x, pin_y: sel.y, body, author: getAuthor() })
+      body: JSON.stringify({ slide_id: sel.slideId, selected_text: sel.text || '', pin_x: sel.x, pin_y: sel.y, body, author: nameVal })
     });
     div.remove();
     loadThreads();
