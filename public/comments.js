@@ -88,9 +88,9 @@ function openNewThread(sel) {
   div.style.left = Math.min(sel.x + 16, window.innerWidth - 360 + window.scrollX) + 'px';
   div.style.top = (sel.y + 16) + 'px';
   div.innerHTML = `
-    <div class="c-reply-input" style="border:none;">
-      <input id="cNewName" placeholder="Your name..." value="${esc(getAuthor())}" style="width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:6px;margin-bottom:6px;font-size:13px;">
-      <textarea id="cNewTA" placeholder="Leave a comment..." rows="2"></textarea>
+    <div class="c-reply-input" style="border:none;flex-wrap:wrap;">
+      <input id="cNewName" placeholder="Your name..." value="${esc(getAuthor())}" style="width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:6px;margin-bottom:6px;font-size:13px;flex:none;">
+      <textarea id="cNewTA" placeholder="Leave a comment..." rows="2" style="width:100%;"></textarea>
       <button id="cNewSubmit">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M10 4l4 4-4 4"/></svg>
       </button>
