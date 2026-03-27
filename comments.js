@@ -204,6 +204,7 @@ function toggleThread(id) {
   div.querySelectorAll('.c-delete-reply').forEach(btn => {
     btn.addEventListener('click', async () => {
       await fetch('/api/replies/' + btn.dataset.id, { method: 'DELETE' });
+      closeAllThreads();
       loadThreads();
     });
   });
