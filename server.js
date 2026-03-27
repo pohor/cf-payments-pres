@@ -9,10 +9,6 @@ app.use(express.json());
 
 // Serve static files from Vite build
 app.use(express.static(path.join(__dirname, 'dist')));
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) return next();
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
 
 const db = new Database(path.join(__dirname, 'comments.db'));
 db.pragma('journal_mode = WAL');
@@ -105,6 +101,12 @@ app.delete('/api/threads/:id', (req, res) => {
   db.prepare('DELETE FROM replies WHERE thread_id = ?').run(req.params.id);
   db.prepare('DELETE FROM threads WHERE id = ?').run(req.params.id);
   res.json({ ok: true });
+});
+
+// SPA fallback — serve index.html for non-API routes
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3001;
